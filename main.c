@@ -15,21 +15,21 @@ int calc_alignment(char* s1, char* s2)
 {
 	int l1 = strlen(s1) + 1, l2 = strlen(s2) + 1;
 	int alignment = 0;
-	int** M = malloc(sizeof(int) * l1);
-	char** P = malloc(sizeof(char) * l1);
+	int** M = (int**) malloc(sizeof(int) * l1);
+	char** P = (char**) malloc(sizeof(char) * l1);
 	
 	int i, j;
 	for (i=0; i<l1; i++)
 	{
-		M[i] = malloc(sizeof(int) * l2);
-		P[i] = malloc(sizeof(char) * l2);
+		M[i] = (int*) malloc(sizeof(int) * l2);
+		P[i] = (char*) malloc(sizeof(char) * l2);
 	}
 	
 	M[0][0] = 0;
 	
 	for (i=0; i<=l1; i++)
 		for (j=0; j<=l2; j++)
-		{			
+		/*{			
 			if (i == 0 && j > 0)
 				M[i][j] = M[i][j-1] - 4;
 			if (i > 0 && j == 0)
@@ -43,7 +43,8 @@ int calc_alignment(char* s1, char* s2)
 				if (M[i][j-1] - 4 > M[i][j])
 					M[i][j] = M[i][j-1] - 4;
 			}
-		}
+		}*/
+		M[i][j] = 5;
 	
 	return M[l1][l2];
 }
