@@ -1,5 +1,8 @@
 #include "main.h"
 
+int** M;
+char** P;
+
 int get_blosum_index(char c)
 {
 	char* symbols = "ARNDCQEGHILKMFPSTWYVBZX";//"ARNDCQEGHILKMFPSTWYV";
@@ -12,12 +15,12 @@ int get_blosum_index(char c)
 	return -1;
 }
 
-void print_matrix(int** M, int h, int w)
+void print_matrix(char** M, int h, int w)
 {
 	int j, i;
 	for (i = 0; i< h; i++ ){
 		for (j = 0; j<w; j++)
-			printf("%d\t", M[i][j]);
+			printf("%c\t", M[i][j]);
 		printf("\n");
 	}
 	printf("\n");
@@ -25,10 +28,10 @@ void print_matrix(int** M, int h, int w)
 
 int calc_alignment(char* s1, char* s2, int b)
 {
-	int l1 = strlen(s1) + 1;
+	int l1 = strlen(s1) + 1, l2 = strlen(s2) + 1;
 	int alignment = 0;
-	int** M = (int**) malloc(sizeof(int*) * l1);
-	char** P = (char**) malloc(sizeof(char*) * l1);
+	M = (int**) malloc(sizeof(int*) * l1);
+	P = (char**) malloc(sizeof(char*) * l1);
 	int b_width = 2 * b + 1;
 	
 	int i, j;
@@ -50,20 +53,30 @@ int calc_alignment(char* s1, char* s2, int b)
 		{
 			initial_j = 0;
 		}
-		if(i==0) M[0][initial_j] = 0;
-		//printf("initial_j %d, final_j %d \n", initial_j, final_j);
+		if(i==0)
+		{
+			M[0][initial_j] = 0;
+			P[0][initial_j] = '#';		
+		}
+		
 		for (j=initial_j; j<final_j; j++)
 		{						
 			if (i == 0 && j > initial_j)
+			{
 				M[i][j] = M[i][j-1] - 4;
+				P[i][j] = '-';
+			}
 			if (i > 0 && j == initial_j)
+			{
 				M[i][j] = M[i-1][j+1] - 4;
+				P[i][j] = '|';
+			}
 			
 			if (i > 0 && j > initial_j)
 			{
 				M[i][j] = M[i-1][j] + blosum[get_blosum_index(s1[i-1])][get_blosum_index(s2[j+i-b-1])];
 				P[i][j] = '\\';
-				//printf("%d", blosum[get_blosum_index(s1[i-1])][get_blosum_index(s2[j+i-b-1])]);
+				
 				if (j < b_width - 1 && M[i-1][j+1] - 4 > M[i][j])
 				{
 					M[i][j] = M[i-1][j+1] - 4;
@@ -75,16 +88,53 @@ int calc_alignment(char* s1, char* s2, int b)
 					P[i][j] = '-';
 				}
 			}
-			//printf("%d %d %d", M[i][j], i, j);
-			//system("pause");
 		}
 	}
 	
-/*	print_matrix(M, l1, b_width);
-	printf("ALIGNMENT: %d\n", M[l1-1][strlen(s2) - l1 + b + 1]);
-	printf("%d", strlen(s2) - l1 + b - 1);
-	system("pause");*/
-	return M[l1-1][strlen(s2) - (l1 - 1) + b];
+	return M[l1 - 1][strlen(s2) - (l1 - 1) + b];
+}
+
+void create_new_strings(char* s1, char* s2, int b)
+{
+	int l1 = strlen(s1) + 1, l2 = strlen(s2);
+	int b_width = 2 * b + 1;
+	char* out_s1 = malloc(l1 + l2 + 1);
+	char* out_s2 = malloc(l1 + l2 + 1);
+	int c1 = 0, c2 = 0;
+	int i = l1 - 1;
+	int j = l2 - (l1 - 1) + b;
+	
+	while(P[i][j] == '-' || P[i][j] == '|' || P[i][j] == '\\')
+	{
+		if (P[i][j] == '-')
+		{
+			out_s1[c1] = '-';
+			out_s2[c2] = s2[j + i - b - 1];
+			j--;
+		} 
+		else if (P[i][j] == '|')
+		{
+			out_s1[c1] = s1[i - 1];
+			out_s2[c2] = '-';
+			i--;
+			j++;
+		}
+		else
+		{
+			out_s1[c1] = s1[i - 1];
+			out_s2[c2] = s2[j + i - b - 1];
+			i--;
+		}
+		
+		c1++;
+		c2++;
+	}
+	
+	printf("%s\n", s1);
+	printf("%s\n\n\n", s2);
+	
+	printf("%s\n", out_s1);
+	printf("%s\n", out_s2);
 }
 
 int self_alignment(char* s1)
@@ -124,10 +174,10 @@ int main(int argc, char *argv[])
 		alignment = calc_alignment(s1, s2, b);
 		bound = self + (-4) * b;
 		b *= 2;
-		//printf("bound = %d b = %d\n", bound, b);
 	} while (b/2 <= (strlen(s1) > strlen(s2) ? strlen(s1) : strlen(s2)) && bound >= alignment);
 	
-	printf("%d", alignment);
+	printf("%d\n\n", alignment);
+	create_new_strings(s1, s2, b/2);
 	
 	return 0;
 }
