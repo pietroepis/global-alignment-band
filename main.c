@@ -18,7 +18,7 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 	int64_t alignment = 0;
 	M = (int64_t**) malloc(sizeof(int64_t*) * l1);
 	P = (char**) malloc(sizeof(char*) * l1);
-	int b_width = 2 * b + extra;
+	int b_width = b + 2 * extra;
 	int i, j;
 	int initial_j, final_j;
 	
@@ -84,7 +84,7 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, int extra)
 {
 	int l1 = strlen(s1) + 1, l2 = strlen(s2);
-	int b_width = 2 * b + extra;
+	int b_width = b + 2 * extra;
 	int c1 = 0, c2 = 0;
 	int i = l1 - 1;
 	int j = l2 - (l1 - 1) + (b_width / 2);
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
 	
 	out_s1 = malloc(l1 + l2 + 1);
 	out_s2 = malloc(l1 + l2 + 1);
-	create_new_strings(s1, s2, out_s1, out_s2, b/2, extra);
+	create_new_strings(s1, s2, out_s1, out_s2, b, extra/2);
 	
 	printf("ALIGNMENT: %d\n", alignment);
 	printf("S1: %s\nS2: %s\n", s1, s2);
