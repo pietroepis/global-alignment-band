@@ -1,11 +1,8 @@
 #include "main.h"
 
-int** M;
-char** P;
-
 int get_blosum_index(char c)
 {
-	char* symbols = "ARNDCQEGHILKMFPSTWYVBZX";//"ARNDCQEGHILKMFPSTWYV";
+	char* symbols = "ARNDCQEGHILKMFPSTWYVBZX";
 					 
 	int i;
 	for (i=0; i<strlen(symbols); i++)
@@ -15,22 +12,11 @@ int get_blosum_index(char c)
 	return -1;
 }
 
-void print_matrix(char** M, int h, int w)
-{
-	int j, i;
-	for (i = 0; i< h; i++ ){
-		for (j = 0; j<w; j++)
-			printf("%c\t", M[i][j]);
-		printf("\n");
-	}
-	printf("\n");
-}
-
 int calc_alignment(char* s1, char* s2, int b, int extra)
 {
 	int l1 = strlen(s1) + 1, l2 = strlen(s2) + 1;
-	int alignment = 0;
-	M = (int**) malloc(sizeof(int*) * l1);
+	int64_t alignment = 0;
+	M = (int64_t**) malloc(sizeof(int64_t*) * l1);
 	P = (char**) malloc(sizeof(char*) * l1);
 	int b_width = 2 * b + extra;
 	int i, j;
@@ -38,8 +24,8 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 	
 	for (i=0; i<l1; i++)
 	{
-		M[i] = (int*)malloc(sizeof(int) * b_width);
-		P[i] = (char*)malloc(sizeof(char) * b_width);
+		M[i] = (int64_t*) malloc(sizeof(int64_t) * b_width);
+		P[i] = (char*) malloc(sizeof(char) * b_width);
 	}
 	
 	for (i = 0; i<l1; i++)
@@ -132,8 +118,8 @@ void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, i
 
 int self_alignment(char* s1)
 {
-	int l1 = strlen(s1);
-	int i, alignment = 0;
+	int l1 = strlen(s1), i;
+	int64_t alignment = 0;
 	
 	for (i=0; i<l1; i++) {
 		alignment += blosum[get_blosum_index(s1[i])][get_blosum_index(s1[i])];
@@ -146,7 +132,7 @@ int main(int argc, char *argv[])
 {
 	FILE *fin, *fout;
 	int l1, l2, b, extra;
-	int self, bound, alignment;
+	int64_t self, bound, alignment;
 	char* s1;
 	char* s2;
 	char* out_s1;
