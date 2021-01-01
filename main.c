@@ -33,7 +33,7 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 			M[i][j] = INT_MIN;
 	
 	for (i=0; i<l1; i++) {
-		initial_j = b_width / 2 - i;
+		initial_j = extra - i;
 		final_j = initial_j + strlen(s2) + 1;
 		if(final_j>b_width) final_j = b_width;
 		if (initial_j < 0)
@@ -61,7 +61,7 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 			
 			if (i > 0 && j > initial_j)
 			{
-				M[i][j] = M[i - 1][j] + blosum[get_blosum_index(s1[i - 1])][get_blosum_index(s2[j + i - (b_width / 2) - 1])];
+				M[i][j] = M[i - 1][j] + blosum[get_blosum_index(s1[i - 1])][get_blosum_index(s2[j + i - extra - 1])];
 				P[i][j] = '\\';
 				
 				if (j < b_width - 1 && M[i-1][j+1] - 4 > M[i][j])
@@ -78,7 +78,7 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 		}
 	}
 	
-	return M[l1 - 1][strlen(s2) - (l1 - 1) + (b_width / 2)];
+	return M[l1 - 1][strlen(s2) - (l1 - 1) + extra];
 }
 
 void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, int extra)
@@ -87,14 +87,14 @@ void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, i
 	int b_width = b + 2 * extra;
 	int c1 = 0, c2 = 0;
 	int i = l1 - 1;
-	int j = l2 - (l1 - 1) + (b_width / 2);
+	int j = l2 - (l1 - 1) + extra;
 	
 	while(P[i][j] == '-' || P[i][j] == '|' || P[i][j] == '\\')
 	{
 		if (P[i][j] == '-')
 		{
 			out_s1[c1] = '-';
-			out_s2[c2] = s2[j + i - (b_width / 2) - 1];
+			out_s2[c2] = s2[j + i - extra - 1];
 			j--;
 		} 
 		else if (P[i][j] == '|')
@@ -107,13 +107,19 @@ void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, i
 		else
 		{
 			out_s1[c1] = s1[i - 1];
-			out_s2[c2] = s2[j + i - (b_width / 2) - 1];
+			out_s2[c2] = s2[j + i - extra - 1];
 			i--;
 		}
 		
 		c1++;
 		c2++;
 	}
+	
+	out_s1[c1] = '\0';
+	out_s2[c2] = '\0';
+	
+	out_s1 = strrev(out_s1);
+	out_s2 = strrev(out_s2);	
 }
 
 int self_alignment(char* s1)
@@ -150,11 +156,17 @@ int main(int argc, char *argv[])
 	
 	fclose(fin);
 	
+	if (strlen(s1) > strlen(s2))
+	{
+		char* tmp;
+		tmp = s1;
+		s1 = s2;
+		s2 = tmp;
+	}
+	
 	self = self_alignment(s1);
-	b = abs(strlen(s1) - strlen(s2));
+	b = abs(strlen(s1) - strlen(s2)) + 1;
 	extra = 1;	
-	if (b == 0)
-		b += 1;
 	
 	do {
 		alignment = calc_alignment(s1, s2, b, extra);
