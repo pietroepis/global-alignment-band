@@ -166,11 +166,11 @@ int main(int argc, char *argv[])
 	// l1 s1 l2 s2
 	fin = fopen("input.txt", "r");
 	
-	fscanf(fin, "%d", &l1);
+	fscanf(fin, "%ld", &l1);
 	s1 = malloc(sizeof(char) * l1);
 	fscanf(fin, "%s", s1);
 	
-	fscanf(fin, "%d", &l2);
+	fscanf(fin, "%ld", &l2);
 	s2 = malloc(sizeof(char) * l2);
 	fscanf(fin, "%s", s2);
 	
