@@ -12,4 +12,5 @@ I valori devono essere separati da uno spazio, e hanno il seguente significato:
 I caratteri ammessi per s1 e s2 sono: 'A', 'R', 'N', 'D', 'C', 'Q', 'E', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V', 'B', 'Z' e 'X'
 
 **Output**\
-L'output viene scritto nel file ` output.txt`
+L'output viene scritto nel file ` output.txt`\
+Il file contiene il valore dell'allineamento e la rappresentazione di s1 e s2 allineate (`-` rappresenta un indel)
