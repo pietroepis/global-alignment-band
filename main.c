@@ -98,7 +98,7 @@ void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, i
 {
 	int64_t l1 = strlen(s1) + 1, l2 = strlen(s2);
 	int64_t b_width = b + 2 * extra;
-	int64_t c1 = 0, c2 = 0;		// Growing indexes two generate output strings
+	int64_t c1 = 0, c2 = 0;		// Growing indexes to generate output strings
 	int64_t i = l1 - 1;
 	int64_t j = l2 - (l1 - 1) + extra;	// Start from the cell which contains the alignment value
 	
