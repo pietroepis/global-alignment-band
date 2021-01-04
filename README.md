@@ -1,6 +1,6 @@
 # global-alignment-band
 
-**Input**
+**Input**\
 L'input proviene dal file `input.txt`, che deve rispettare la seguente struttura:\
 l1 s1 l2 s2\
 I valori devono essere separati da uno spazio, e hanno il seguente significato:\
@@ -9,5 +9,5 @@ I valori devono essere separati da uno spazio, e hanno il seguente significato:\
 - l2: Lunghezza della seconda stringa
 - s2: La seconda stringa (lunga l2 caratteri)
 
-**Output**
+**Output**\
 L'output viene scritto nel file ` output.txt`
