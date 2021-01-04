@@ -13,7 +13,7 @@ int get_blosum_index(char c)
 	return -1;
 }
 
-int calc_alignment(char* s1, char* s2, int b, int extra)
+int64_t calc_alignment(char* s1, char* s2, int64_t b, int64_t extra)
 {
 	int64_t l1 = strlen(s1) + 1;	// matrix height. +1 in order to consider empty string too
 	int64_t alignment = 0;
@@ -94,7 +94,7 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 	return M[l1 - 1][strlen(s2) - (l1 - 1) + extra];	// Cell containing the alignment value
 }
 
-void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, int extra)
+void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int64_t b, int64_t extra)
 {
 	int64_t l1 = strlen(s1) + 1, l2 = strlen(s2);
 	int64_t b_width = b + 2 * extra;
@@ -140,7 +140,7 @@ void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, i
 }
 
 // Returns the alignment value of a string with itself
-int self_alignment(char* s1)
+int64_t self_alignment(char* s1)
 {
 	int64_t l1 = strlen(s1), i;
 	int64_t alignment = 0;
