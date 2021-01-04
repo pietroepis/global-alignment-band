@@ -15,13 +15,13 @@ int get_blosum_index(char c)
 
 int calc_alignment(char* s1, char* s2, int b, int extra)
 {
-	int l1 = strlen(s1) + 1;	// matrix height. +1 in order to consider empty string too
+	int64_t l1 = strlen(s1) + 1;	// matrix height. +1 in order to consider empty string too
 	int64_t alignment = 0;
 	M = (int64_t**) malloc(sizeof(int64_t*) * l1);	// Dynamic Programming Matrix
 	P = (char**) malloc(sizeof(char*) * l1);	// Ancestors Matrix
-	int b_width = b + 2 * extra;
-	int i, j;
-	int initial_j, final_j;
+	int64_t b_width = b + 2 * extra;
+	int64_t i, j;
+	int64_t initial_j, final_j;
 	
 	for (i=0; i<l1; i++)
 	{
@@ -96,11 +96,11 @@ int calc_alignment(char* s1, char* s2, int b, int extra)
 
 void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, int extra)
 {
-	int l1 = strlen(s1) + 1, l2 = strlen(s2);
-	int b_width = b + 2 * extra;
-	int c1 = 0, c2 = 0;		// Growing indexes two generate output strings
-	int i = l1 - 1;
-	int j = l2 - (l1 - 1) + extra;	// Start from the cell which contains the alignment value
+	int64_t l1 = strlen(s1) + 1, l2 = strlen(s2);
+	int64_t b_width = b + 2 * extra;
+	int64_t c1 = 0, c2 = 0;		// Growing indexes two generate output strings
+	int64_t i = l1 - 1;
+	int64_t j = l2 - (l1 - 1) + extra;	// Start from the cell which contains the alignment value
 	
 	while(P[i][j] == '-' || P[i][j] == '|' || P[i][j] == '\\')
 	{
@@ -142,7 +142,7 @@ void create_new_strings(char* s1, char* s2, char* out_s1, char* out_s2, int b, i
 // Returns the alignment value of a string with itself
 int self_alignment(char* s1)
 {
-	int l1 = strlen(s1), i;
+	int64_t l1 = strlen(s1), i;
 	int64_t alignment = 0;
 	
 	for (i=0; i<l1; i++) {
@@ -155,7 +155,7 @@ int self_alignment(char* s1)
 int main(int argc, char *argv[])
 {
 	FILE *fin, *fout;					// input and output file streams
-	int l1, l2, b, extra;				// input strings length, band width and extra (b + 2 * extra)
+	int64_t l1, l2, b, extra;			// input strings length, band width and extra (b + 2 * extra)
 	int64_t self, bound, alignment;		// best alignment, upper bound, current alignment
 	char* s1;							// 1st input string
 	char* s2;							// 2nd input string
@@ -201,15 +201,13 @@ int main(int argc, char *argv[])
 	out_s2 = malloc(l1 + l2 + 1);
 	create_new_strings(s1, s2, out_s1, out_s2, b, extra/2);
 	
-	printf("ALIGNMENT: %d\n", alignment);
-	printf("S1: %s\nS2: %s\n", s1, s2);
-	printf("OUT_S1: %s\nOUT_S2: %s\n", out_s1, out_s2);
-	
 	fout = fopen("output.txt", "w");
-	fprintf(fout, "ALIGNMENT: %d\n\n", alignment);
+	fprintf(fout, "ALIGNMENT: %ld\n\n", alignment);
 	fprintf(fout, "%s\n", out_s1);
 	fprintf(fout, "%s", out_s2);
-	fclose(fout);	
+	fclose(fout);
+	
+	printf("\nOutput File successfully created\n");	
 	
 	return 0;
 }
