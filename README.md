@@ -1,6 +1,7 @@
 # global-alignment-band
+Bioinformatics Project - UniMiB
 
-This program improves the computation of the optimal global alignment of two sequences, by using a band.\
+This program improves the computation of the optimal global alignment of two sequences (Needleman-Wunsch algorithm), by using a band.\
 _BLOSUM62_ was used as score matrix of reference
 
 **Input**\
